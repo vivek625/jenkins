@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Git Checkout ') {
             steps {
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/jaiswaladi246/SpringBoot-WebApplication.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/Reliable-Royalty-29/SpringBoot-WebApplication.git'
             }
         }
         
@@ -56,10 +56,10 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                    script {
-                       withDockerRegistry(credentialsId: 'b289dc43-2ede-4bd0-95e8-75ca26100d8d', toolName: 'docker') {
+                       withDockerRegistry(credentialsId: 'Docker-Cred', toolName: 'docker') {
                             sh "docker build -t webapp ."
-                            sh "docker tag webapp adijaiswal/webapp:latest"
-                            sh "docker push adijaiswal/webapp:latest "
+                            sh "docker tag webapp dheeman29/webapp:latest"
+                            sh "docker push dheeman29/webapp:latest "
                         }
                    } 
             }
