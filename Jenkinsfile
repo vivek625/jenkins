@@ -49,25 +49,32 @@ pipeline {
         
         stage('Maven Build') {
             steps {
-                    sh "mvn clean compile"
+                    sh "mvn clean package"
             }
         }
         
         stage('Docker Build & Push') {
             steps {
-                   script {
-                       withDockerRegistry(credentialsId: 'Docker-Cred', toolName: 'docker') {
+                script {
+                    withDockerRegistry(credentialsId: 'D', toolName: 'docker') {
                             sh "docker build -t webapp ."
                             sh "docker tag webapp dheeman29/webapp:latest"
                             sh "docker push dheeman29/webapp:latest "
-                        }
-                   } 
+ 
+                   }
+                }   
             }
         }
         
         stage('Docker Image scan') {
             steps {
-                    sh "trivy image adijaiswal/webapp:latest "
+                    sh "trivy image dheeman29/webapp:latest "
+            }
+        }
+        
+         stage('Deploy Container using Docker Image') {
+            steps {
+                sh 'docker run -d --name springboot -p 8087:8087 dheeman29/webapp:latest'
             }
         }
         
