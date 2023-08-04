@@ -1,138 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Techflix</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix Login</title>
   <style>
-    * {
-      box-sizing: border-box;
+    body {
       margin: 0;
       padding: 0;
-    }
-
-    body {
       font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1587710859239-61e25b2bb6c3');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
     .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+      max-width: 400px;
+      padding: 40px;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     .logo {
-      font-size: 24px;
+      font-size: 32px;
       font-weight: bold;
-    }
-
-    .nav {
-      list-style-type: none;
-      display: flex;
-    }
-
-    .nav li {
-      margin-left: 20px;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .hero h1 {
-      font-size: 48px;
+      color: #e50914;
       margin-bottom: 20px;
     }
 
-    .cta-btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #e50914;
-      color: #fff;
-      font-size: 18px;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-
-    .features {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 40px;
-    }
-
-    .feature {
-      flex-basis: 30%;
-      text-align: center;
-    }
-
-    .feature img {
-      width: 80px;
-      margin-bottom: 20px;
-    }
-
-    .feature h3 {
-      font-size: 24px;
+    .login-form input {
+      width: 100%;
+      padding: 10px;
       margin-bottom: 10px;
-    }
-
-    .feature p {
+      border: 1px solid #ccc;
+      border-radius: 4px;
       font-size: 16px;
     }
 
-    .footer {
-      text-align: center;
-      padding-top: 40px;
+    .login-form button {
+      width: 100%;
+      padding: 12px;
+      background-color: #e50914;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
     }
 
-    .footer p {
+    .login-form button:hover {
+      background-color: #d30b10;
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: 10px;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .signup {
+      margin-top: 20px;
       font-size: 14px;
+    }
+
+    .signup a {
+      color: #e50914;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header class="header">
-      <h1 class="logo">Techflix</h1>
-      <ul class="nav">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Movies</a></li>
-        <li><a href="#">TV Shows</a></li>
-        <li><a href="#">About</a></li>
-      </ul>
-    </header>
-    <section class="hero">
-      <h1>Unleash Your Tech Dreams</h1>
-      <p>Watch the latest tech content on Techflix.</p>
-      <a href="#" class="cta-btn">Get Started</a>
-    </section>
-    <section class="features">
-      <div class="feature">
-        <img src="https://example.com/feature1.jpg" alt="Feature 1">
-        <h3>Discover</h3>
-        <p>Discover a wide range of tech-related content.</p>
-      </div>
-      <div class="feature">
-        <img src="https://example.com/feature2.jpg" alt="Feature 2">
-        <h3>Stream</h3>
-        <p>Stream your favorite tech shows and movies.</p>
-      </div>
-      <div class="feature">
-        <img src="https://example.com/feature3.jpg" alt="Feature 3">
-        <h3>Learn</h3>
-        <p>Learn new tech skills from industry experts.</p>
-      </div>
-    </section>
-    <footer class="footer">
-      <p>&copy; 2023 Techflix. All rights reserved.</p>
-    </footer>
+    <div class="logo">Netflix</div>
+    <form class="login-form">
+      <input type="email" placeholder="Email or Phone Number" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Sign In</button>
+      <a class="forgot-password" href="#">Forgot password?</a>
+    </form>
+    <div class="signup">
+      New to Netflix? <a href="#">Sign up now</a>
+    </div>
   </div>
 </body>
 </html>
