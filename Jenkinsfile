@@ -73,11 +73,10 @@ pipeline {
                 sh 'trivy image dheeman29/netflix-website:v1'
             }
         } 
- stage('Deploy to Kubernetes') {
+ stage('Deploy to Docker Container') {
             steps {
-                // Apply the Kubernetes manifest files
-                sh 'kubectl apply -f deployment.yml'
-		        sh 'kubectl apply -f service.yml'
+                sh 'docker run -d --name netflix-website -p 9010:9010 dheeman29/netflix-website:v1'
+                
             }
         }
     
