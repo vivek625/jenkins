@@ -49,13 +49,13 @@ pipeline {
         }
     }
 
-    stages {
+    
         stage('Checking Pipeline Execution Status') {
             steps {
                 echo "Checking"
             }
         }
-    }
+    
 
     post {
         always {
