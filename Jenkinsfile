@@ -77,7 +77,7 @@ pipeline {
             steps {
                 script {
                         withDockerRegistry(credentialsId: 'Docker') {
-                        sh 'docker run -d --name netflix-website -p 9010:9010 dheeman29/netflix-website:v1'
+                        sh 'docker run -d --name zoo -p 8083:8083 dheeman29/netflix-website:v1'
                         }
                     }
                 }
