@@ -47,15 +47,13 @@ pipeline {
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-    }
 
-    
         stage('Checking Pipeline Execution Status') {
             steps {
                 echo "Checking"
             }
         }
-    
+    }
 
     post {
         always {
