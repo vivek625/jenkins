@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('sonar-plugin') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix-Website -Dsonar.java.binaries=. -Dsonar.projectKey=Netflix-Website '''
+                        sh ''' $SCANNER_HOME/bin/sonarqube -Dsonar.projectName=Netflix-Website -Dsonar.java.binaries=. -Dsonar.projectKey=Netflix-Website '''
                     }
                 }
             }
