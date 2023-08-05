@@ -61,7 +61,7 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'Docker') {
                         sh 'docker build -t netflix-website .'
-                        sh 'docker tag Netflix-Website dheeman29/netflix-website:v1'
+                        sh 'docker tag netflix-website dheeman29/netflix-website:v1'
                         sh 'docker push dheeman29/netflix-website:v1'
                     }
                 }
