@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: spring-boot-app
-        image: adijaiswal/xyz:tag
+        image: dheeman29/netflix-website:v1
         ports:
-        - containerPort: 8081
+        - containerPort: 8083
