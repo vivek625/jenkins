@@ -73,13 +73,14 @@ pipeline {
                 sh 'trivy image dheeman29/netflix-website:v1'
             }
         } 
- stage('Deploy to Docker Container') {
+   stage('Deploy the application to Docker Container') {
             steps {
-                sh 'docker run -d --name netflix-website -p 9010:9010 dheeman29/netflix-website:v1'
-                
+                script {
+                        withDockerRegistry(credentialsId: 'Docker') {
+                        sh 'docker run -d --name netflix-website -p 9010:9010 dheeman29/netflix-website:v1'
+                        }
+                    }
+                }
             }
-        }
-    
-
+         }
     }
-}
