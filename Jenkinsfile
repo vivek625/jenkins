@@ -55,5 +55,24 @@ pipeline {
                 }
             }
         }
+
+        stage('Build the Docker Image and Push to DockerHub') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'Docker') {
+                        sh 'docker build -t Netflix-Website .'
+                        sh 'docker tag Netflix-Website dheeman29/Netflix-Website:v1'
+                        sh 'docker push dheeman29/Netflix-Website:v1'
+                    }
+                }
+            }
+        }
+
+         stage('Docker Image Scan By Trivy') {
+            steps {
+                sh 'trivy image dheeman29/Netflix-Website:v1'
+            }
+        } 
+
     }
 }
