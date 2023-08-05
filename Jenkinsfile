@@ -60,9 +60,9 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'Docker') {
-                        sh 'docker build -t Netflix-Website .'
-                        sh 'docker tag Netflix-Website dheeman29/Netflix-Website:v1'
-                        sh 'docker push dheeman29/Netflix-Website:v1'
+                        sh 'docker build -t netflix-website .'
+                        sh 'docker tag Netflix-Website dheeman29/netflix-website:v1'
+                        sh 'docker push dheeman29/netflix-website:v1'
                     }
                 }
             }
@@ -70,7 +70,7 @@ pipeline {
 
          stage('Docker Image Scan By Trivy') {
             steps {
-                sh 'trivy image dheeman29/Netflix-Website:v1'
+                sh 'trivy image dheeman29/netflix-website:v1'
             }
         } 
 
