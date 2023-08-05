@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        SCANNER_HOME= tool 'sonar-scanner'
+        SCANNER_HOME = tool 'sonar-scanner'
     }
     
     stages {
@@ -40,12 +40,41 @@ pipeline {
                 }
             }
         }
-       stage('Project Dependency Check Stage') {
+        
+        stage('Project Dependency Check Stage') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'Dependency-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        
+    }
+
+    stages {
+        stage('Checking Pipeline Execution Status') {
+            steps {
+                echo "Checking"
+            }
+        }
+    }
+
+    post {
+        always {
+            emailext body: "Pipeline execution completed.\n\nCheck console output at:\n${env.BUILD_URL}", 
+                     recipientProviders: [[$class: 'DevelopersRecipientProvider'],
+                                         [$class: 'RequesterRecipientProvider']], 
+                     subject: "Pipeline Execution Status - ${currentBuild.currentResult}"
+        }
+        success {
+            emailext body: "Pipeline succeeded.\n\nCheck console output at:\n${env.BUILD_URL}", 
+                     recipientProviders: [[$class: 'DevelopersRecipientProvider'],
+                                         [$class: 'RequesterRecipientProvider']], 
+                     subject: "Pipeline Success - ${currentBuild.currentResult}"
+        }
+        failure {
+            emailext body: "Pipeline failed.\n\nCheck console output at:\n${env.BUILD_URL}", 
+                     recipientProviders: [[$class: 'DevelopersRecipientProvider'],
+                                         [$class: 'RequesterRecipientProvider']], 
+                     subject: "Pipeline Failure - ${currentBuild.currentResult}"
+        }
     }
 }
