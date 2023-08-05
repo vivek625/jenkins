@@ -47,32 +47,13 @@ pipeline {
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-
-        stage('Checking Pipeline Execution Status') {
+        
+        stage('Deploy Build Artifact to Nexus') {
             steps {
-                echo "Checking"
+                configFileProvider([configFile(fileId: 'abdd1477-5e22-4da6-99d1-8817d595cc37', variable: 'mavensettings')]) {
+                    sh 'mvn -s $mavensettings clean deploy'
+                }
             }
-        }
-    }
-
-    post {
-        always {
-            emailext body: "Pipeline execution completed.\n\nCheck console output at:\n${env.BUILD_URL}", 
-                     recipientProviders: [[$class: 'DevelopersRecipientProvider'],
-                                         [$class: 'RequesterRecipientProvider']], 
-                     subject: "Pipeline Execution Status - ${currentBuild.currentResult}"
-        }
-        success {
-            emailext body: "Pipeline succeeded.\n\nCheck console output at:\n${env.BUILD_URL}", 
-                     recipientProviders: [[$class: 'DevelopersRecipientProvider'],
-                                         [$class: 'RequesterRecipientProvider']], 
-                     subject: "Pipeline Success - ${currentBuild.currentResult}"
-        }
-        failure {
-            emailext body: "Pipeline failed.\n\nCheck console output at:\n${env.BUILD_URL}", 
-                     recipientProviders: [[$class: 'DevelopersRecipientProvider'],
-                                         [$class: 'RequesterRecipientProvider']], 
-                     subject: "Pipeline Failure - ${currentBuild.currentResult}"
         }
     }
 }
