@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        SCANNER_HOME = tool 'sonarqube'
+        SCANNER_HOME= tool 'sonar-scanner'
     }
     
     stages {
@@ -32,8 +32,10 @@ pipeline {
         stage('Sonarqube Static Code Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('sonar-plugin') {
-                        sh ''' $SCANNER_HOME/bin/sonarqube -Dsonar.projectName=Netflix-Website -Dsonar.java.binaries=. -Dsonar.projectKey=Netflix-Website '''
+                    withSonarQubeEnv('sonar-server') {
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix-Website \
+                        -Dsonar.java.binaries=. \
+                        -Dsonar.projectKey=Netflix-Website '''
                     }
                 }
             }
