@@ -74,14 +74,12 @@ pipeline {
                 sh 'trivy image dheeman29/netflix-website:v1'
             }
         }
-        
-       stage('Deploying Application to Kubernetes') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "Deploy-Service.yaml")
+         stage('Deploy to Tomcat') {
+            steps {
+                sh 'sudo cp/var/lib/jenkins/workspace/NETFLIX-CI/target/spring-boot-web.jar /opt/apache-tomcat-9.0.65/webapps/'
+            }
         }
-      }
-    }
+       
     }
 
     // Send Slack notifications outside the stages block
