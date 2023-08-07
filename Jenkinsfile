@@ -68,21 +68,24 @@ pipeline {
             }
         }
 
-         stage('Docker Image Scan By Trivy') {
+        stage('Docker Image Scan By Trivy') {
             steps {
                 sh 'trivy image dheeman29/netflix-website:v1'
             }
         } 
-   stage('Deploy the application to Docker Container') {
+        
+        stage('Deploy the application to Docker Container') {
             steps {
                 script {
-                        withDockerRegistry(credentialsId: 'Docker') {
+                    withDockerRegistry(credentialsId: 'Docker') {
                         sh 'docker run -d --name zoo -p 8083:8083 dheeman29/netflix-website:v1'
-                        }
                     }
                 }
             }
-        // Define the Slack notifications configuration
+        }
+    }
+
+    // Define the Slack notifications configuration
     post {
         success {
             slackSend color: 'good', message: "Pipeline Succeeded! :tada:"
@@ -91,5 +94,4 @@ pipeline {
             slackSend color: 'danger', message: "Pipeline Failed! :fire:"
         }
     }
-         }
-    }
+}
