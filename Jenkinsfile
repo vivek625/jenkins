@@ -71,7 +71,7 @@ pipeline {
 
         stage('Docker Image Scan By Trivy') {
             steps {
-                sh 'trivy image dheeman29/netflix-website:v2'
+                sh 'trivy image dheeman29/netflix-website:v1'
             }
         }
     }
