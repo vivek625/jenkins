@@ -74,6 +74,21 @@ pipeline {
                 sh 'trivy image dheeman29/netflix-website:v1'
             }
         }
+        
+        stage('Deploy to k8s') {
+            steps {
+                sshagent(['k8s']) {
+                    sh "scp -o StrictHostKeyChecking=no Deploy-Service.yaml Dheeman@20.115.22.29:/root"
+                    script {
+                        try {
+                            sh "ssh Dheeman@20.115.22.29 kubectl create -f /root/Deploy-Service.yaml"
+                        } catch (error) {
+                            echo "Error: ${error}"
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Send Slack notifications outside the stages block
