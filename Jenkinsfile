@@ -82,5 +82,14 @@ pipeline {
                     }
                 }
             }
+        // Define the Slack notifications configuration
+    post {
+        success {
+            slackSend color: 'good', message: "Pipeline Succeeded! :tada:"
+        }
+        failure {
+            slackSend color: 'danger', message: "Pipeline Failed! :fire:"
+        }
+    }
          }
     }
