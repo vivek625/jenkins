@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     tools {
         jdk 'jdk11'
         maven 'maven3'
@@ -9,7 +9,7 @@ pipeline {
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
     }
-    
+
     stages {
         stage('Git Checkout') {
             steps {
@@ -22,13 +22,13 @@ pipeline {
                 sh "mvn test"
             }
         }
-        
+
         stage('Build Artifact') {
             steps {
                 sh "mvn clean package"
             }
         }
-        
+
         stage('Sonarqube Static Code Analysis') {
             steps {
                 script {
@@ -40,14 +40,14 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Project Dependency Check Stage') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'Dependency-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        
+
         stage('Deploy Build Artifact to Nexus') {
             steps {
                 configFileProvider([configFile(fileId: 'abdd1477-5e22-4da6-99d1-8817d595cc37', variable: 'mavensettings')]) {
@@ -72,26 +72,27 @@ pipeline {
             steps {
                 sh 'trivy image dheeman29/netflix-website:v1'
             }
-        } 
-        
-        stage('Deploy the application to Docker Container') {
-            steps {
-                script {
-                    withDockerRegistry(credentialsId: 'Docker') {
-                        sh 'docker run -d --name zoo -p 8083:8083 dheeman29/netflix-website:v1'
+        }
+
+       
+    
+
+    stage('Send the Pipeline Success Notification To Slack') {
+        steps {
+            script {
+                // Define the Slack notifications configuration
+                post {
+                    success {
+                       slackSend color: 'good', message: "Pipeline for Project: ${env.PROJECT_NAME} Succeeded! :tada:"
+                    }
+                    failure {
+                        slackSend color: 'danger', message: "Pipeline for Project: ${env.PROJECT_NAME} Failed! :fire:"
                     }
                 }
             }
         }
     }
-
-    // Define the Slack notifications configuration
-    post {
-        success {
-            slackSend color: 'good', message: "Pipeline Succeeded! :tada:"
-        }
-        failure {
-            slackSend color: 'danger', message: "Pipeline Failed! :fire:"
-        }
     }
 }
+
+
