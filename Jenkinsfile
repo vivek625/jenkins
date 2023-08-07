@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
+        PROJECT_NAME = 'Netflix-Website' // Define the project name here
     }
 
     stages {
@@ -73,26 +74,15 @@ pipeline {
                 sh 'trivy image dheeman29/netflix-website:v1'
             }
         }
+    }
 
-       
-    
-
-    stage('Send the Pipeline Success Notification To Slack') {
-        steps {
-            script {
-                // Define the Slack notifications configuration
-                post {
-                    success {
-                       slackSend color: 'good', message: "Pipeline for Project: ${env.PROJECT_NAME} Succeeded! :tada:"
-                    }
-                    failure {
-                        slackSend color: 'danger', message: "Pipeline for Project: ${env.PROJECT_NAME} Failed! :fire:"
-                    }
-                }
-            }
+    // Send Slack notifications outside the stages block
+    post {
+        success {
+            slackSend color: 'good', message: "Pipeline for Project: ${env.PROJECT_NAME} Succeeded! :tada:"
+        }
+        failure {
+            slackSend color: 'danger', message: "Pipeline for Project: ${env.PROJECT_NAME} Failed! :fire:"
         }
     }
-    }
 }
-
-
