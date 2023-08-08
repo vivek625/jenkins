@@ -1,0 +1,84 @@
+trigger:
+- main # Set your desired branch here
+
+pr:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: BuildAndDeploy
+  displayName: 'Build and Deploy'
+  steps:
+  - task: UseJavaVersion@1
+    inputs:
+      versionSpec: '11'
+      addToPath: true
+      jdkArchitectureOption: 'x64'
+
+  - task: MavenAuthenticate@0
+    inputs:
+      mavenServiceConnections: 'your-maven-service-connection' # Set your Maven service connection here
+
+  - script: |
+      git checkout main
+    displayName: 'Git Checkout'
+
+  - script: |
+      mvn test
+    displayName: 'Run Test Cases'
+
+  - script: |
+      mvn clean package
+    displayName: 'Build Artifact'
+
+  - task: SonarQubePrepare@4
+    inputs:
+      SonarQube: 'your-sonarqube-service-connection' # Set your SonarQube service connection here
+      scannerMode: 'CLI'
+      extraProperties: |
+        sonar.projectName=Netflix-Website
+        sonar.java.binaries=.
+        sonar.projectKey=Netflix-Website
+    displayName: 'Sonarqube Static Code Analysis'
+
+  - task: DependencyCheck@0
+    inputs:
+      odcInstallation: 'Dependency-Check'
+      scanPath: './'
+    displayName: 'Project Dependency Check Stage'
+
+  - script: |
+      mvn -s $(mavensettings) clean deploy
+    env:
+      MAVEN_SETTINGS: $(mavensettings)
+    displayName: 'Deploy Build Artifact to Nexus'
+
+  - script: |
+      docker build -t netflix-website .
+      docker tag netflix-website dheeman29/netflix-website:v2
+      docker push dheeman29/netflix-website:v2
+    displayName: 'Build the Docker Image and Push to DockerHub'
+
+  - script: |
+      trivy image dheeman29/netflix-website:v2
+    displayName: 'Docker Image Scan By Trivy'
+
+  - script: |
+      sudo cp /var/lib/jenkins/workspace/"NETFLIX-CI"/target/spring-boot-web.jar /opt/apache-tomcat-9.0.65/webapps/
+    displayName: 'Deploy to Tomcat'
+
+  - task: SlackSend@1
+    inputs:
+      slackType: 'Message'
+      channel: 'your-slack-channel'
+      message: 'Pipeline for Project: $(PROJECT_NAME) $(Agent.JobStatus) :tada:'
+    condition: succeeded()
+
+  - task: SlackSend@1
+    inputs:
+      slackType: 'Message'
+      channel: 'your-slack-channel'
+      message: 'Pipeline for Project: $(PROJECT_NAME) $(Agent.JobStatus) :fire:'
+    condition: failed()
