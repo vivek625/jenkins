@@ -33,7 +33,7 @@ pipeline {
         stage('Sonarqube Static Code Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('sonar-server') {
+                    withSonarQubeEnv('sonarqube1') {
                         sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix-Website \
                         -Dsonar.java.binaries=. \
                         -Dsonar.projectKey=Netflix-Website '''
